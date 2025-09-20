@@ -6,3 +6,4 @@ pdfplumber
 transformers
 torch
 tqdm
+flask>=2.0.0

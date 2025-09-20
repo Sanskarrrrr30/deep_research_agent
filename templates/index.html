@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Research Agent</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .query-section {
+            margin-bottom: 30px;
+        }
+        .query-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .query-input:focus {
+            outline: none;
+            border-color: #007cba;
+        }
+        .btn {
+            background: #007cba;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .btn:hover {
+            background: #005a8a;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .results-section {
+            margin-top: 30px;
+        }
+        .result-box {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .result-title {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .status {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .download-btn {
+            background: #28a745;
+            margin-top: 10px;
+        }
+        .download-btn:hover {
+            background: #1e7e34;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Deep Research Agent</h1>
+        
+        <div id="status" class="status" style="display: none;"></div>
+        
+        <div class="query-section">
+            <textarea 
+                id="queryInput" 
+                class="query-input" 
+                placeholder="Enter your research query here..."
+                rows="3"
+            ></textarea>
+            <button id="submitBtn" class="btn" onclick="submitQuery()">🔎 Search</button>
+            <button id="rebuildBtn" class="btn" onclick="rebuildIndex()">🔄 Rebuild Index</button>
+            <button id="downloadBtn" class="btn download-btn" onclick="downloadResult()" style="display: none;">📥 Download Result</button>
+        </div>
+        
+        <div id="results" class="results-section" style="display: none;">
+            <div class="result-box">
+                <div class="result-title">📑 Retrieved Evidence:</div>
+                <div id="evidence"><pre></pre></div>
+            </div>
+            
+            <div class="result-box">
+                <div class="result-title">📝 Synthesized Summary:</div>
+                <div id="summary"><pre></pre></div>
+            </div>
+        </div>
+        
+        <div id="loading" class="loading" style="display: none;">
+            Processing your query...
+        </div>
+    </div>
+
+    <script>
+        // Check system status on page load
+        window.addEventListener('load', checkStatus);
+        
+        async function checkStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                const statusDiv = document.getElementById('status');
+                
+                if (data.status === 'ready') {
+                    statusDiv.textContent = `✅ System ready! Found ${data.data_files} data files.`;
+                    statusDiv.style.display = 'block';
+                } else {
+                    statusDiv.textContent = `❌ Error: ${data.message}`;
+                    statusDiv.className = 'status error';
+                    statusDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Status check failed:', error);
+            }
+        }
+        
+        async function submitQuery() {
+            const query = document.getElementById('queryInput').value.trim();
+            if (!query) {
+                alert('Please enter a query');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+            results.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('evidence').querySelector('pre').textContent = data.evidence;
+                    document.getElementById('summary').querySelector('pre').textContent = data.summary;
+                    results.style.display = 'block';
+                    document.getElementById('downloadBtn').style.display = 'inline-block';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Network error: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+        
+        async function rebuildIndex() {
+            const rebuildBtn = document.getElementById('rebuildBtn');
+            rebuildBtn.disabled = true;
+            rebuildBtn.textContent = '🔄 Rebuilding...';
+            
+            try {
+                const response = await fetch('/api/rebuild-index', { method: 'POST' });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Index rebuilt successfully!');
+                    checkStatus(); // Refresh status
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                alert('Network error: ' + error.message);
+            } finally {
+                rebuildBtn.disabled = false;
+                rebuildBtn.textContent = '🔄 Rebuild Index';
+            }
+        }
+        
+        function downloadResult() {
+            window.location.href = '/download-result';
+        }
+        
+        // Allow Enter key to submit
+        document.getElementById('queryInput').addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.key === 'Enter') {
+                submitQuery();
+            }
+        });
+    </script>
+</body>
+</html>
