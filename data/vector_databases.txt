@@ -1,0 +1,7 @@
+Vector databases store and search embeddings efficiently. 
+They are optimized for similarity search, where the goal is to find the closest vectors 
+to a given query vector. 
+
+Popular vector databases include FAISS, Pinecone, Weaviate, and Milvus. 
+These databases are commonly used in semantic search engines, recommendation systems, 
+and AI applications that require fast retrieval of relevant information.

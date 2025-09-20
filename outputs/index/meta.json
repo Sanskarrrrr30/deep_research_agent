@@ -1,0 +1,24 @@
+{
+  "metadatas": [
+    {
+      "source": "embeddings_basics.txt",
+      "chunk": 0,
+      "text_preview": "Embeddings are numerical vector representations of text, images, or other data. In Natural Language Processing, embeddings capture semantic meaning so that words with similar meanings are located clos"
+    },
+    {
+      "source": "faiss_overview.txt",
+      "chunk": 0,
+      "text_preview": "FAISS (Facebook AI Similarity Search) is an open-source library developed by Meta AI. It is designed for efficient similarity search and clustering of dense vectors. FAISS enables developers to quickl"
+    },
+    {
+      "source": "sample.txt",
+      "chunk": 0,
+      "text_preview": "Deep Researcher Agent - Sample Document This is a small sample document to demonstrate the Deep Researcher Agent. The system should be able to read this file, chunk it, embed the chunks, and retrieve "
+    },
+    {
+      "source": "vector_databases.txt",
+      "chunk": 0,
+      "text_preview": "Vector databases store and search embeddings efficiently. They are optimized for similarity search, where the goal is to find the closest vectors to a given query vector. Popular vector databases incl"
+    }
+  ]
+}

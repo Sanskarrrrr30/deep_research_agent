@@ -1,0 +1,7 @@
+Embeddings are numerical vector representations of text, images, or other data. 
+In Natural Language Processing, embeddings capture semantic meaning so that words with similar meanings 
+are located close together in vector space. 
+
+For example, the words "king" and "queen" are semantically related, so their embeddings 
+will be closer than "king" and "car". Popular models for generating embeddings include 
+Word2Vec, GloVe, and Sentence-Transformers.

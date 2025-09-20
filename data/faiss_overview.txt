@@ -1,0 +1,7 @@
+FAISS (Facebook AI Similarity Search) is an open-source library developed by Meta AI. 
+It is designed for efficient similarity search and clustering of dense vectors. 
+FAISS enables developers to quickly find nearest neighbors in high-dimensional data, 
+making it useful for applications like recommendation systems, image retrieval, and semantic search.
+
+The library supports CPU and GPU acceleration and provides multiple indexing methods such as 
+IVF (Inverted File Index), PQ (Product Quantization), and HNSW (Hierarchical Navigable Small World graphs).

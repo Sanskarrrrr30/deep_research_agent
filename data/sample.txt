@@ -1,0 +1,13 @@
+Deep Researcher Agent - Sample Document
+
+This is a small sample document to demonstrate the Deep Researcher Agent.
+The system should be able to read this file, chunk it, embed the chunks, and
+retrieve relevant pieces in response to a query.
+
+Example content:
+- The quick brown fox jumps over the lazy dog.
+- Machine learning models can be used to create embeddings that represent
+  semantic meaning of pieces of text.
+- FAISS is a popular library for efficient similarity search over vectors.
+- Sentence-Transformers provide pre-trained models to create embeddings.
+- For PDF reading, pdfplumber can be used to extract text from pages.
