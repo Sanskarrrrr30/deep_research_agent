@@ -4,12 +4,12 @@ import os, glob, json
 from tqdm import tqdm
 
 class Retriever:
-    def __init__(self, data_dir='data', index_dir='outputs/index', chunk_size=500, overlap=50, model_name='all-MiniLM-L6-v2'):
+    def __init__(self, data_dir='data', index_dir='outputs/index', chunk_size=500, overlap=50, model_name='all-MiniLM-L12-v2'):
         self.data_dir = data_dir
         self.index_dir = index_dir
         self.chunk_size = chunk_size
         self.overlap = overlap
-        self.model_name = model_name
+        self.model_name = model_name  # Using smaller model for better memory usage
         self.index_path = os.path.join(index_dir, 'faiss.index')
         self.meta_path = os.path.join(index_dir, 'meta.json')
         self._index = None

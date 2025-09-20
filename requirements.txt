@@ -7,3 +7,5 @@ transformers
 torch
 tqdm
 flask>=2.0.0
+streamlit>=1.28.0
+gunicorn>=20.1.0
